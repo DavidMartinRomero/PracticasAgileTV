@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "video")
-public class video {
+public class Video {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,11 @@ public class video {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Format must be DASH, HLS or SMOOTHSTREAMING.")
-    private String format;
+    private Format format;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "DRM must be WIDEVINE, PLAYREADY or FAIRPLAY.")
-    private String drm;
+    private Drm drm;
 
     private LocalDateTime createdAt;
 
@@ -41,10 +41,10 @@ public class video {
     public void setTitle(String title)                  {this.title = title;}
     public int getDuration()                            {return duration;}
     public void setDuration(int duration)               {this.duration = duration;}
-    public String getFormat()                           {return format;}
-    public void setFormat(String format)                {this.format = format;}
-    public String getDrm()                              {return drm;}
-    public void setDrm(String drm)                      {this.drm = drm;}
+    public Format getFormat()                           {return format;}
+    public void setFormat(Format format)                {this.format = format;}
+    public Drm getDrm()                                 {return drm;}
+    public void setDrm(Drm drm)                         {this.drm = drm;}
     public LocalDateTime getCreatedAt()                 {return createdAt;}
     public void setCreatedAt(LocalDateTime createdAt)   {this.createdAt = createdAt;}
 }
