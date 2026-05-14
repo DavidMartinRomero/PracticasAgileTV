@@ -35,12 +35,12 @@ public class VideoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(video));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public Video update(@PathVariable Long id, @Valid @RequestBody Video video){
         return service.update(id, video);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
