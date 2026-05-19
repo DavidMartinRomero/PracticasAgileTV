@@ -143,7 +143,42 @@ function VideoEditForm({ video, onSaved, onCancel }){
 }
 
 function App() {
+  const [videos, setVideos]         = useState([]);
+  const [editingVideo, setEditing]  = useState(null);
   
+  async function loadVideos() {
+    const res = await fetch("http://localhost:8081/api/videos");
+    setVideos(await res.json());
+  }
+
+  useEffect(() => {loadVideos(); }, []);
+
+  return(
+    <div>
+      <h1>MediaAsset CMS</h1>
+
+      <VideoForm onSaved={loadVideos} />
+
+      <ul>
+        {videos.map(v => (
+          <li key={v.id}>
+            {editingVideo?.id === v.id ? (
+              <VideoEditForm 
+              video ={v}
+              onSaved={() => {setEditing(null); loadVideos(); }}
+              onCancel={() => setEditing(null)}
+              />
+            ) : (
+              <span>
+                {v.title} - {v.format} / {v.drm} ({v.duration}s)
+                <button onClick={() => setEditing(v)}>Editar</button>
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 export default App
