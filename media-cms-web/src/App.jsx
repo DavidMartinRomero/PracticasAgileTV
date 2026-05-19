@@ -28,12 +28,12 @@ function VideoList(){
 }
 
 function VideoForm({ onSaved }){
-  const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState("");
-  const [format, setFormat] = useState("DASH");
-  const [drm, setDrm] = useState("WIDEVINE");
-  const [loading, setLoading] = useState(false);
-  const [error, serError] = useState(null);
+  const [title, setTitle]         = useState("");
+  const [duration, setDuration]   = useState("");
+  const [format, setFormat]       = useState("DASH");
+  const [drm, setDrm]             = useState("WIDEVINE");
+  const [loading, setLoading]     = useState(false);
+  const [error, serError]         = useState(null);
 
   const isValid = title.trim() !== "" && Number(duration) > 0;
 
@@ -65,14 +65,14 @@ function VideoForm({ onSaved }){
 
   return(
     <form onSubmit={handleSubmit}>
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder='Titulo'/>
-      <input value={duration} onChange={e => setDuration(e.target.value)} placeholder='Duración (s)' type='number'/>
-      <select value={format} onChange={e => setFormat(e.target.value)}>
+      <input  value={title} onChange      ={e => setTitle(e.target.value)} placeholder='Titulo'/>
+      <input  value={duration} onChange   ={e => setDuration(e.target.value)} placeholder='Duración (s)' type='number'/>
+      <select value={format} onChange     ={e => setFormat(e.target.value)}>
         <option>DASH</option>
         <option>HLS</option>
         <option>SMOOTHSTREAMING</option>
       </select>
-      <select value={drm} onChange={e => setDrm(e.target.value)}>
+      <select value={drm} onChange        ={e => setDrm(e.target.value)}>
         <option>WIDEVINE</option>
         <option>FAIRPLAY</option>
         <option>PLAYREADY</option>
@@ -85,7 +85,62 @@ function VideoForm({ onSaved }){
   );
 }
 
+function VideoEditForm({ video, onSaved, onCancel }){
+  const [title, setTitle]         = useState(video.title);
+  const [duration, setDuration]   = useState(video.duration);
+  const [format, setFormat]       = useState(video.format);
+  const [drm, setDrm]             = useState(video.drm);
+  const [loading, setLoading]     = useState(false);
+  const [error, serError]         = useState(null);
 
+  const isValid = title.trim() !== "" && Number(duration) > 0;
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try{
+      const res = await fetch('http://localhost:8081/api/videos/${video.id}', {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          title,
+          duration: Number(duration),
+          format,
+          drm,
+        }),
+      });
+      if (!res.ok) throw new Error("Error al actualizar el video");
+      onSaved();
+    }catch (err){
+      setError(err.message);
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  return(
+    <form onSubmit={handleSubmit}>
+      <input  value={title}     onChange={e => setTitle(e.target.value)} placeholder='Titulo'/>
+      <input  value={duration}  onChange={e => setDuration(e.target.value)} placeholder='Duración (s)' type='number'/>
+      <select value={format}    onChange={e => setFormat(e.target.value)}>
+        <option>DASH</option>
+        <option>HLS</option>
+        <option>SMOOTHSTREAMING</option>
+      </select>
+      <select value={drm}       onChange={e => setDrm(e.target.value)}>
+        <option>WIDEVINE</option>
+        <option>FAIRPLAY</option>
+        <option>PLAYREADY</option>
+      </select>
+      {error && <p style={{color: "red"}}>{error}</p>}
+      <button type='submit' disabled={!isValid || loading}>
+        {loading ? "Guardando..." : "Guardar vídeo"}
+      </button>
+      <button type='button' onClick={onCancel}>Cancelar</button>
+    </form>
+  );
+}
 
 function App() {
   
