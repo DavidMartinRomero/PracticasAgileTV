@@ -33,7 +33,7 @@ function VideoForm({ onSaved }){
   const [format, setFormat]       = useState("DASH");
   const [drm, setDrm]             = useState("WIDEVINE");
   const [loading, setLoading]     = useState(false);
-  const [error, serError]         = useState(null);
+  const [error, setError]         = useState(null);
 
   const isValid = title.trim() !== "" && Number(duration) > 0;
 
@@ -91,7 +91,7 @@ function VideoEditForm({ video, onSaved, onCancel }){
   const [format, setFormat]       = useState(video.format);
   const [drm, setDrm]             = useState(video.drm);
   const [loading, setLoading]     = useState(false);
-  const [error, serError]         = useState(null);
+  const [error, setError]         = useState(null);
 
   const isValid = title.trim() !== "" && Number(duration) > 0;
 
@@ -100,7 +100,7 @@ function VideoEditForm({ video, onSaved, onCancel }){
     setLoading(true);
     setError(null);
     try{
-      const res = await fetch('http://localhost:8081/api/videos/${video.id}', {
+      const res = await fetch(`http://localhost:8081/api/videos/${video.id}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
