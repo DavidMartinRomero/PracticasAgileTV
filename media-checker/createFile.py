@@ -23,7 +23,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--name", required=True)
     parser.add_argument("--size", type=int, required=True)
-    parser.add_argument("--drm", type=int, required=True)
+    parser.add_argument("--drm", type=int,choices=[1, 2, 3], required=True)
     args = parser.parse_args()
     
     createFile(args.name, args.size, args.drm)
