@@ -63,3 +63,8 @@ Thumbs.db
 
 
 venv/
+requirements.txt
+ingest/
+setup_venv.bat
+setup_venv.sh
+report.json
