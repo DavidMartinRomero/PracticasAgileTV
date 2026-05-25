@@ -20,30 +20,50 @@ def check_media(ingest_dir: str):
     print(f"[INFO] Files found: {len(files)}\n")
 
     # Pattern: <code(3-6 chars)>_<title>.<ext>
-    name_pattern = re.compile(r"^[A-Z0-9]{3,6}_[\w-]+\.(mp4|mxf)$")
+    name_pattern = re.compile(r"^[A-Z0-9]{3,6}_[\w -]+\.(mp4|mxf)$")
 
     for file in files:
         if file.is_dir():
             continue
             
-        error_reason = None
+        file_errors = []
         
         # 1. Check Extension
         if file.suffix.lower() not in ['.mp4', '.mxf']:
-            error_reason = "unsupported extension"
+            file_errors.append("unsupported extension")
         
         # 2. Check Naming Convention
-        elif not name_pattern.match(file.name):
-            error_reason = "invalid filename (must be CODE_title.ext)"
-            
-        # 3. Check Size
-        elif file.stat().st_size == 0:
-            error_reason = "file size is 0 bytes"
+        if not name_pattern.match(file.name):
+            file_errors.append("invalid filename (must be CODE_title.ext)")
 
-        if error_reason:
-            print(f"[WARN] {file.name} -> {error_reason}")
-            report["errors"] += 1
-            report["details"].append({"file": file.name, "reason": error_reason})
+        # 3. Chech Spaces in file name.
+        if " " in file.name:
+            file_errors.append("invalid filename (spaces are not allowed)")
+            
+        # 4. Check Size
+        if file.stat().st_size == 0:
+            file_errors.append("file size is 0 bytes")
+
+        # 5. Check DRM
+        else:
+            try:
+                valid_drm = ["WIDEVINE", "FAIRPLAY", "SMOOTHSTREAMING"]
+
+                with open(file, "rb") as f:
+                    chunk = f.read(20)
+                    header_text = chunk.decode('utf-8', errors='ignore')
+                    drm_found = header_text.split(":")[0]
+                    if drm_found not in valid_drm:
+                        file_errors.append("invalid or missing DRM header")
+            except Exception as e:
+                file_errors.append("Could not read DRM header")
+
+        if file_errors:
+            errors = ", ".join(file_errors)
+
+            print(f"[WARN] {file.name} -> {errors}")
+            report["errors"] += len(file_errors)
+            report["details"].append({"file": file.name, "reason": file_errors})
 
     # Save report
     with open("report.json", "w") as f:
