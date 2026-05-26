@@ -32,39 +32,3 @@ build/
 Dockerfile
 build/reports/problems/problems-report.html
 arbol.txt
-.idea/
-.vscode/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# --- BACKEND (JAVA / GRADLE) ---
-.gradle/
-bin/
-out/
-.settings/
-.classpath
-.project
-
-# --- FRONTEND (NODE / VITE / REACT) ---
-node_modules/
-.vite/
-.vite-temp/
-dist/
-dist-ssr/
-*.local
-
-# --- ARCHIVOS DEL SISTEMA ---
-Thumbs.db
-.DS_Store
-.gitignore
-
-
-venv/
-requirements.txt
-ingest/
-setup_venv.bat
-setup_venv.sh
-report.json
