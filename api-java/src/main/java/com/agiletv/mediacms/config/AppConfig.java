@@ -1,4 +1,4 @@
-package main.java.com.agiletv.mediacms.config;
+package com.agiletv.mediacms.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package main.java.com.agiletv.mediacms.dto;
+package com.agiletv.mediacms.dto;
 
 import java.util.List;
 
