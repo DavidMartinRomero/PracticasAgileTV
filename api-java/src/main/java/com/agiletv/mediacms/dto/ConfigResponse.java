@@ -8,7 +8,7 @@ public record ConfigResponse(String clientType, Theme theme, Features features) 
 
     public record Features(
             boolean downloadEnabled,
-            int maxConcurrentsStreams,
+            int maxConcurrentStreams,
             List<String> allowedFormats,
             List<String> allowedDrm
     ) {}
