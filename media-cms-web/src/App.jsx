@@ -56,7 +56,11 @@ function AppConfig() {
           </select>
         </div>
         {config && (
+<<<<<<< HEAD
           <div style={{ color: 'black', padding: '10px 16px', borderRadius: '8px', margin: '10px 0', display: 'flex', flexDirection: 'column', flexWrap: 'wrap', gap: '10px', fontSize: '0.85em' }}>
+=======
+          <div style={{ color: 'black', padding: '10px 16px', borderRadius: '8px', margin: '16px 0', display: 'flex', flexDirection: 'column', flexWrap: 'wrap', gap: '16px', fontSize: '0.85em' }}>
+>>>>>>> aec84802a350ba8c39fa7bbe6781a45378bff8fc
             <span style={{ backgroundColor: 'var(--primary_color)', border: '1px solid black', borderRadius: '2px' }}>🎨 Color Primario: <strong style={{ opacity: 1 }}>{config.theme.primaryColor}</strong></span>
             <span style={{ backgroundColor: 'var(--secondary_color)', border: '1px solid black', borderRadius: '2px' }}>🎨 Color Secundario: <strong style={{ opacity: 1 }}>{config.theme.secondaryColor}</strong></span>
             <span style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '2px' }}>📺 Streams: <strong style={{ opacity: 1 }}>{config.features.maxConcurrentStreams}</strong></span>
