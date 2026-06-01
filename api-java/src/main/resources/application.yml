@@ -1,0 +1,31 @@
+app:
+  clients:
+    consumer:
+      theme:
+        primary-color: "#4a4e63"
+        secondary-color: "#8a93ba"
+      features:
+        download-enabled: false
+        max-concurrent-streams: 2
+        allowed-formats: [DASH, HLS]
+        allowed-drm: [WIDEVINE, FAIRPLAY]
+
+    enterprise:
+      theme:
+        primary-color: "#00D1D1"
+        secondary-color: "#00D272"
+      features:
+        download-enabled: true
+        max-concurrent-streams: 5
+        allowed-formats: [ DASH, HLS, SMOOTHSTREAMING ]
+        allowed-drm: [ WIDEVINE, PLAYREADY, FAIRPLAY ]
+
+    partner:
+      theme:
+        primary-color: "#00D272"
+        secondary-color: "#00D1D1"
+      features:
+        download-enabled: true
+        max-concurrent-streams: 10
+        allowed-formats: [ DASH, HLS, SMOOTHSTREAMING ]
+        allowed-drm: [ WIDEVINE, PLAYREADY, FAIRPLAY ]

@@ -26,6 +26,50 @@ function VideoList() {
   );
 }
 
+function AppConfig() {
+  const [clientType, setClientType] = useState("consumer");
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    fetch(`http://localhost:8081/api/config?clientType=${clientType}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Network error");
+        return res.json();
+      })
+      .then(cfg => {
+        setConfig(cfg);
+        document.documentElement.style.setProperty('--primary_color', cfg.theme.primaryColor);
+        document.documentElement.style.setProperty('--secondary_color', cfg.theme.secondaryColor);
+      })
+      .catch(err => setError(err.message));
+  }, [clientType])
+
+  return (
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '20px', gap: '6px' }}>
+      <div style={{ width: '50%', backgroundColor: 'var(--secondary_color)', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.454)' }}>
+        <div style={{backgroundColor: 'var(--primary_color)', borderRadius: '10px 10px 0 0', paddingBottom: '5px'}}>
+          <label style={{ fontWeight: 'bold', color: 'white', marginRight: '10px' }}>Tipo de cliente:</label>
+          <select value={clientType} onChange={e => setClientType(e.target.value)}>
+            <option>CONSUMER</option>
+            <option>ENTERPRISE</option>
+            <option>PARTNER</option>
+          </select>
+        </div>
+        {config && (
+          <div style={{ color: 'black', padding: '10px 16px', borderRadius: '8px', margin: '10px 0', display: 'flex', flexDirection: 'column', flexWrap: 'wrap', gap: '10px', fontSize: '0.85em' }}>
+            <span style={{ backgroundColor: 'var(--primary_color)', border: '1px solid black', borderRadius: '2px' }}>🎨 Color Primario: <strong style={{ opacity: 1 }}>{config.theme.primaryColor}</strong></span>
+            <span style={{ backgroundColor: 'var(--secondary_color)', border: '1px solid black', borderRadius: '2px' }}>🎨 Color Secundario: <strong style={{ opacity: 1 }}>{config.theme.secondaryColor}</strong></span>
+            <span style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '2px' }}>📺 Streams: <strong style={{ opacity: 1 }}>{config.features.maxConcurrentStreams}</strong></span>
+            <span style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '2px' }}>⬇️ Descarga: <strong style={{ opacity: 1 }}>{config.features.downloadEnabled ? "Activada" : "Desactivada"}</strong></span>
+            <span style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '2px' }}>📦 Formatos: <strong style={{ opacity: 1 }}>{config.features.allowedFormats.join(", ")}</strong></span>
+            <span style={{ backgroundColor: 'white', border: '1px solid black', borderRadius: '2px' }}>🔒 DRM: <strong style={{ opacity: 1 }}>{config.features.allowedDrm.join(", ")}</strong></span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function VideoForm({ onSaved }) {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("");
@@ -124,7 +168,7 @@ function VideoEditForm({ video, onSaved, onDeleted, onCancel }) {
       const res = await fetch(`http://localhost:8081/api/videos/${video.id}`, {
         method: "DELETE"
       });
-      if(!res.ok) throw new Error("Error al actualizar el video");
+      if (!res.ok) throw new Error("Error al actualizar el video");
       onDeleted();
     } catch (err) {
       setError(err.message);
@@ -185,12 +229,12 @@ function App() {
 
       <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
 
-        <div style={{ width: '50%', backgroundColor: 'rgb(138, 147, 186)', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.454)' }}>
+        <div style={{ width: '50%', backgroundColor: '#8a93ba', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.454)' }}>
           <h4 style={{ borderRadius: '10px 10px 0 0', backgroundColor: 'rgba(0, 0, 0, 0.254)', color: 'white' }}>Añadir video</h4>
           <VideoForm onSaved={loadVideos} />
         </div>
 
-        <div style={{ width: '50%', backgroundColor: 'rgb(138, 147, 186)', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.454)'}}>
+        <div style={{ width: '50%', backgroundColor: 'rgb(138, 147, 186)', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.454)' }}>
           <h4 style={{ borderRadius: '10px 10px 0 0', backgroundColor: 'rgba(0, 0, 0, 0.254)', color: 'white' }}>Vídeos en el CMS. ({videos.length} videos.)</h4>
           <ul style={{ listStyle: 'none', paddingLeft: '0', backgroundColor: 'rgb(138, 147, 186)' }}>
             {videos.map(v => (
@@ -218,6 +262,9 @@ function App() {
           </ul>
         </div>
       </div>
+      <AppConfig>
+
+      </AppConfig>
     </div >
   )
 }
